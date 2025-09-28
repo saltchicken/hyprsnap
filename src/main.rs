@@ -2,6 +2,7 @@ use gtk4::gdk::{Display, Key, prelude::*};
 use gtk4::EventControllerKey;
 use gtk4::{Application, ApplicationWindow, CssProvider, Button, glib, Builder};
 use gtk4::prelude::{WidgetExt, GtkWindowExt, ButtonExt};
+use std::process::Command;
 
 // 1. Embed the GtkBuilder XML file
 const UI_FILE: &str = include_str!("./grid.ui");
@@ -52,15 +53,35 @@ fn build_ui(app: &Application) {
         );
     }
     
-    // 5. Connect Signals (Example: Center button)
-    let center_button: Button = builder
-        .object("button_1_1")
-        .expect("Could not get button_1_1 from builder. Ensure it's defined in grid.ui.");
+    // 5. Connect Signals
+    let buttons_and_commands = vec![
+        ("button_center", "dispatch setfloating 1; dispatch resizeactive exact 2560 1440; dispatch moveactive exact 1280 0"),
+        ("button_left_full", "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 0 0"),
+        ("button_right_full", "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 3840 0"),
+        ("button_right_lower", "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 720"),
+        ("button_left_upper", "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 0"),
+        ("button_right_upper", "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 0"),
+        ("button_left_lower", "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 720"),
+    ];
 
-    // This now works because ButtonExt is imported
-    center_button.connect_clicked(|_| {
-        println!("Center button (1, 1) clicked!");
-    });
+    for (button_id, command_str) in buttons_and_commands {
+        let button: Button = builder
+            .object(button_id)
+            .unwrap_or_else(|| panic!("Could not get {} from builder.", button_id));
+        
+        button.connect_clicked(glib::clone!(@weak window, @strong command_str => move |_| {
+            println!("Executing command: {}", command_str);
+            match Command::new("hyprctl")
+                .arg("--batch")
+                .arg(&command_str)
+                .spawn()
+                     {
+                    Ok(_) => println!("Command executed successfully"),
+                    Err(e) => println!("Failed to execute command: {}", e),
+                }
+            window.close();
+        }));
+    }
 
     let key_controller = EventControllerKey::new();
 
