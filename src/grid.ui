@@ -15,7 +15,6 @@
 
         <child>
           <object class="GtkButton" id="button_left_full">
-            <property name="label">Left Full</property>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
             <layout>
@@ -28,7 +27,6 @@
 
         <child>
           <object class="GtkButton" id="button_right_full">
-            <property name="label">Right Full</property>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
             <layout>
@@ -41,7 +39,6 @@
         
         <child>
           <object class="GtkButton" id="button_center">
-            <property name="label">Center</property>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
             <layout>
@@ -52,7 +49,6 @@
         </child>
         <child>
           <object class="GtkButton" id="button_left_upper">
-            <property name="label">Left Upper</property>
             <property name="hexpand">true</property><property name="vexpand">true</property>
             <layout><property name="column">1</property><property name="row">0</property></layout>
           </object>
@@ -60,7 +56,6 @@
         
         <child>
           <object class="GtkButton" id="button_right_upper">
-            <property name="label">Right Upper</property>
             <property name="hexpand">true</property><property name="vexpand">true</property>
             <layout><property name="column">4</property><property name="row">0</property></layout>
           </object>
@@ -68,7 +63,6 @@
         
         <child>
           <object class="GtkButton" id="button_left_lower">
-            <property name="label">Left Lower</property>
             <property name="hexpand">true</property><property name="vexpand">true</property>
             <layout><property name="column">1</property><property name="row">1</property></layout>
           </object>
@@ -76,7 +70,6 @@
         
         <child>
           <object class="GtkButton" id="button_right_lower">
-            <property name="label">Right Lower</property>
             <property name="hexpand">true</property><property name="vexpand">true</property>
             <layout><property name="column">4</property><property name="row">1</property></layout>
           </object>
