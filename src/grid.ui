@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkApplicationWindow" id="main_window">
+    <property name="title">GtkBuilder 6x2 Grid with Merged Center</property>
+    <property name="default-width">600</property>
+    <property name="default-height">200</property>
+    <property name="child">
+      <object class="GtkGrid" id="main_grid">
+        <property name="row-spacing">5</property>
+        <property name="column-spacing">5</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+
+        <child>
+          <object class="GtkButton" id="button_col_0">
+            <property name="label">COL 0 (Span)</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="row-span">2</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkButton" id="button_col_5">
+            <property name="label">COL 5 (Span)</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <layout>
+              <property name="column">5</property>
+              <property name="row">0</property>
+              <property name="row-span">2</property>
+            </layout>
+          </object>
+        </child>
+        
+        <child>
+          <object class="GtkButton" id="button_center_merged">
+            <property name="label">MERGED CENTER (2x2)</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">0</property>
+              <property name="column-span">2</property> <property name="row-span">2</property>    </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_1_0">
+            <property name="label">R 0, C 1</property>
+            <property name="hexpand">true</property><property name="vexpand">true</property>
+            <layout><property name="column">1</property><property name="row">0</property></layout>
+          </object>
+        </child>
+        
+        <child>
+          <object class="GtkButton" id="button_4_0">
+            <property name="label">R 0, C 4</property>
+            <property name="hexpand">true</property><property name="vexpand">true</property>
+            <layout><property name="column">4</property><property name="row">0</property></layout>
+          </object>
+        </child>
+        
+        <child>
+          <object class="GtkButton" id="button_1_1">
+            <property name="label">R 1, C 1</property>
+            <property name="hexpand">true</property><property name="vexpand">true</property>
+            <layout><property name="column">1</property><property name="row">1</property></layout>
+          </object>
+        </child>
+        
+        <child>
+          <object class="GtkButton" id="button_4_1">
+            <property name="label">R 1, C 4</property>
+            <property name="hexpand">true</property><property name="vexpand">true</property>
+            <layout><property name="column">4</property><property name="row">1</property></layout>
+          </object>
+        </child>
+        
+      </object>
+    </property>
+  </object>
+</interface>
