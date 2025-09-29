@@ -4,18 +4,17 @@ use gtk4::{Application, ApplicationWindow, Button, Builder, CssProvider, EventCo
 use gtk4::prelude::{ButtonExt, GtkWindowExt, WidgetExt};
 use std::collections::HashMap;
 use std::process::Command;
+use gtk4_layer_shell::{Layer, LayerShell, KeyboardMode};
 
-// 1. Embed the GtkBuilder XML file
+
 const UI_FILE: &str = include_str!("./grid.ui");
 
-// 2. Define the CSS
 const CSS: &str = r#"
 window {
     background-color: rgba(0, 0, 0, 0.5);
 }
 "#;
 
-// Struct to hold all info about a button
 struct ButtonInfo {
     id: &'static str,
     label: &'static str,
@@ -41,7 +40,12 @@ fn build_ui(app: &Application) {
 
     window.set_application(Some(app));
 
-    // 4. Apply Window Settings and CSS
+    // 1. Init LayerShell
+    LayerShell::init_layer_shell(&window);
+    window.set_layer(Layer::Overlay);
+    window.set_keyboard_mode(KeyboardMode::Exclusive);
+
+    // 2. Set window properties
     window.set_decorated(false);
 
     let provider = CssProvider::new();
@@ -55,29 +59,27 @@ fn build_ui(app: &Application) {
         );
     }
 
-    // 5. Define buttons with their new labels, commands, and key triggers
-    // FIX 1: Changed Key::KEY_1 to Key::_1, etc.
+    // 3. Init buttons
     let buttons_data = vec![
-        ButtonInfo { id: "button_left_full",  label: "1. Left Full",   command: "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 0 0", key: Key::_1 },
-        ButtonInfo { id: "button_left_upper", label: "2. Left Upper",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 0", key: Key::_2 },
-        ButtonInfo { id: "button_left_lower", label: "3. Left Lower",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 720", key: Key::_3 },
-        ButtonInfo { id: "button_center",     label: "4. Center",      command: "dispatch setfloating 1; dispatch resizeactive exact 2560 1440; dispatch moveactive exact 1280 0", key: Key::_4 },
-        ButtonInfo { id: "button_right_upper",label: "5. Right Upper", command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 0", key: Key::_5 },
-        ButtonInfo { id: "button_right_lower",label: "6. Right Lower", command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 720", key: Key::_6 },
-        ButtonInfo { id: "button_right_full", label: "7. Right Full",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 3840 0", key: Key::_7 },
+        ButtonInfo { id: "button_left_full",   label: "1. Left Full",   command: "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 0 0", key: Key::_1 },
+        ButtonInfo { id: "button_left_upper",  label: "2. Left Upper",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 0", key: Key::_2 },
+        ButtonInfo { id: "button_left_lower",  label: "3. Left Lower",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 0 720", key: Key::_3 },
+        ButtonInfo { id: "button_center",      label: "4. Center",      command: "dispatch setfloating 1; dispatch resizeactive exact 2560 1440; dispatch moveactive exact 1280 0", key: Key::_4 },
+        ButtonInfo { id: "button_right_upper", label: "5. Right Upper", command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 0", key: Key::_5 },
+        ButtonInfo { id: "button_right_lower", label: "6. Right Lower", command: "dispatch setfloating 1; dispatch resizeactive exact 1280 720; dispatch moveactive exact 3840 720", key: Key::_6 },
+        ButtonInfo { id: "button_right_full",  label: "7. Right Full",  command: "dispatch setfloating 1; dispatch resizeactive exact 1280 1440; dispatch moveactive exact 3840 0", key: Key::_7 },
     ];
-    
+
     let mut key_to_button_map: HashMap<Key, Button> = HashMap::new();
 
     for info in buttons_data {
         let button: Button = builder
             .object(info.id)
             .unwrap_or_else(|| panic!("Could not get {} from builder.", info.id));
-        
-        // Set the new label with the number
+
         button.set_label(info.label);
-        
-        let command_str = info.command.to_string(); // Prepare command for closure
+
+        let command_str = info.command.to_string();
         button.connect_clicked(clone!(@weak window => move |_| {
             println!("Executing command: {}", command_str);
             if let Err(e) = Command::new("hyprctl")
@@ -92,7 +94,7 @@ fn build_ui(app: &Application) {
         key_to_button_map.insert(info.key, button);
     }
 
-    // 6. Set up the key controller
+    // 4. Init key controller
     let key_controller = EventControllerKey::new();
     key_controller.connect_key_released(clone!(@weak window, @strong key_to_button_map => move |_, key, _, _| {
 
@@ -108,6 +110,6 @@ fn build_ui(app: &Application) {
 
     window.add_controller(key_controller);
 
-    // 7. Show the Window
+    // 5. Show window
     window.present();
 }
