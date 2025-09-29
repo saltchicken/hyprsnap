@@ -1,6 +1,6 @@
 # Hyprsnap snapping-tool
 
-NOTE! This is specifically for ultra widescreen monitors (5120x1440) running Hyprland.
+* NOTE! This is specifically for ultra widescreen monitors (5120x1440) running Hyprland.
 
 Hyprsnap is a lightweight, GTK-based overlay for the Hyprland window manager for widescreen monitors. It provides a quick, visual way to snap your active window to predefined screen locations using a grid of buttons or corresponding number keys.
 
